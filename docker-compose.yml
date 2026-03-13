@@ -1,0 +1,14 @@
+services:
+  workspace:
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+      FOUNDRYPAL_SESSION_TTL_MS: 43200000
+      FOUNDRYPAL_CHAT_RATE_MAX: 5
+      FOUNDRYPAL_CHAT_RATE_WINDOW_MS: 10000
+    command: sh -c "corepack enable && pnpm install && pnpm test"
