@@ -1,0 +1,30 @@
+{
+  "id": "foundrypal-bridge",
+  "title": "FoundryPal Bridge",
+  "description": "Secure bridge module for FoundryPal mobile companion.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "FoundryPal"
+    }
+  ],
+  "esmodules": [
+    "dist/index.js"
+  ],
+  "languages": [],
+  "styles": [],
+  "packs": [],
+  "socket": true,
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      }
+    ]
+  }
+}
