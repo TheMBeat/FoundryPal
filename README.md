@@ -7,7 +7,7 @@ Technical foundation for a self-hosted Foundry VTT mobile companion with strict 
 1. **Monorepo with one shared contract package and two apps**
    - `packages/shared` owns all DTOs, commands, and transport message schemas.
    - `apps/foundry-module` is the trusted server-side bridge module running inside Foundry.
-   - `apps/companion-web` is currently a minimal scaffold that depends only on shared contracts.
+   - `apps/companion-web` is a mobile-first React companion client using only shared contracts.
 2. **Trust boundary is the Foundry module**
    - Client is untrusted.
    - Every command is schema validated with Zod.
@@ -26,8 +26,15 @@ Technical foundation for a self-hosted Foundry VTT mobile companion with strict 
 
 - `packages/shared`: Zod schemas + TypeScript types for DTOs, commands, transport envelopes.
 - `apps/foundry-module`: Foundry module manifest + bootstrap + bridge services + command handlers + tests.
-- `apps/companion-web`: mobile app placeholder transport client scaffold.
+- `apps/companion-web`: iPhone-first companion app with bottom tabs for character, actions, inventory, spells, and chat.
 - `infra`: env examples.
+
+## Companion webapp contracts used
+
+The web app consumes only shared schemas/contracts from `@foundrypal/shared`:
+- DTOs: `CompanionUserSession`, `CompanionActorSummary`, `CompanionActorDetail`, `CompanionChatMessage`.
+- Commands: `updateHP`, `spendResource`, `useItem`, `castSpell`, `sendChatMessage`.
+- Transport envelopes: `session`, `snapshot`, `event`, `command`, `commandResult`, `error`.
 
 ## Security boundary notes
 
@@ -43,6 +50,7 @@ Technical foundation for a self-hosted Foundry VTT mobile companion with strict 
 - Session issuance endpoint transport/auth handshake is not yet wired to a real HTTP/WebSocket server.
 - Chat sanitization relies on Foundry behavior; additional sanitization may be needed depending on deployment.
 - Ownership snapshot is fixed at session issue time; permission changes mid-session require reissue.
+- Actions tab currently displays compatible actions but intentionally keeps execution controls disabled until a dedicated action command contract exists.
 
 ## Commands implemented
 
@@ -74,6 +82,18 @@ pnpm build
 pnpm typecheck
 pnpm test
 pnpm dev
+```
+
+### Companion webapp
+
+```bash
+pnpm --filter @foundrypal/companion-web dev
+```
+
+Set bridge socket URL (optional):
+
+```bash
+VITE_BRIDGE_WS_URL=ws://localhost:3001/bridge pnpm --filter @foundrypal/companion-web dev
 ```
 
 ### Docker
